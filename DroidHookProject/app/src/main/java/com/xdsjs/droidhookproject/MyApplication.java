@@ -1,6 +1,8 @@
 package com.xdsjs.droidhookproject;
 
 import android.app.Application;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.util.Log;
 
 import com.xdsjs.droidhook.DroidHookManager;
@@ -22,13 +24,19 @@ public class MyApplication extends Application {
             DroidHookManager.getInstance().installIActivityManagerHook(null, "startActivity", new HookedMethodHandler(this) {
                 @Override
                 protected boolean beforeInvoke(Object receiver, Method method, Object[] args) throws Throwable {
-                    Log.e("-------------->", "before " + method.getName() + " invoke!");
+                    if (args != null && args.length > 0) {
+                        for (int i = 0; i < args.length; i++) {
+                            if (args[i] != null && args[i] instanceof Intent) {
+                                //劫持Intent并指向ThirdActivity
+                                args[i] = new Intent().setClass(getApplicationContext(), ThirdActivity.class);
+                            }
+                        }
+                    }
                     return super.beforeInvoke(receiver, method, args);
                 }
 
                 @Override
                 protected void afterInvoke(Object receiver, Method method, Object[] args, Object invokeResult) throws Throwable {
-                    Log.e("-------------->", "after " + method.getName() + " invoke!");
                     super.afterInvoke(receiver, method, args, invokeResult);
                 }
             });

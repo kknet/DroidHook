@@ -10,5 +10,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="turn to SecondActivity" />
+        android:text="打开第二个Activity" />
 </RelativeLayout>
